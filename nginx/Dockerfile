@@ -7,3 +7,5 @@ FROM nginx:latest
 
 # COPY ./nginx/nginx_poxi.conf /etc/nginx/conf.d/default.conf
 # COPY ./nginx/nginx.conf /etc/nginx/
+
+# COPY --from=front /app/build /usr/share/nginx/html
