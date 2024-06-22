@@ -27,7 +27,7 @@ jobs:
           script: |
             if [[ -d /home/${{ env.SSH_USERNAME }}/Crystall/ ]]; then
               sudo chmod -R 755 /home/${{ env.SSH_USERNAME }}/Crystall/
-              sudo chown -R admin:admin /home/${{ env.SSH_USERNAME }}/Crystall/
+              sudo chown -R ${{ env.SSH_USERNAME }}:${{ env.SSH_USERNAME }} /home/${{ env.SSH_USERNAME }}/Crystall/
             else
               echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
             fi
