@@ -24,7 +24,7 @@ jobs:
           username: ${{ env.SSH_USERNAME }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ env.SSH_PORT }}
-          script: |
+          run: |
             if [[ -d /home/${{ env.SSH_USERNAME }}/Crystall/ ]]; then
               sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/
               sudo chown -R ${{ env.SSH_USERNAME }}:${{ env.SSH_USERNAME }} /home/${{ env.SSH_USERNAME }}/Crystall/
@@ -86,7 +86,7 @@ jobs:
           username: ${{ env.SSH_USERNAME }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ env.SSH_PORT }}
-          script: |
+          run: |
              /home/${{ env.SSH_USERNAME }}/Crystall/devops/check_docker.sh || \
              /home/${{ env.SSH_USERNAME }}/Crystall/devops/install_docker_docker-compose.sh ||
               echo "Did not check Docker"
