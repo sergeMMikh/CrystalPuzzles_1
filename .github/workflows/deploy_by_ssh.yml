@@ -41,11 +41,11 @@ jobs:
       - name: Add known hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-  
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+    
       - name: Refresh content
         run: |
-          rsync -e "ssh -i $SSH_AUTH_SOCK -o StrictHostKeyChecking=no" --archive --compress --delete \
+          rsync -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete \
           . ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST_NAME }}:Crystall
 
       - name: Change directory permitions again
