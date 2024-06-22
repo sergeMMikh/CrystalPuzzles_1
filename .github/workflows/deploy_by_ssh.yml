@@ -25,9 +25,15 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ env.SSH_PORT }}
           script: |
-            [[ -f /home/${{ env.SSH_USERNAME }}/Crystall/ ]] \
-            && sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/ \
-            || echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
+            if [[ -d /home/${{ env.SSH_USERNAME }}/Crystall/ ]]; then
+              sudo chmod -R 755 /home/${{ env.SSH_USERNAME }}/Crystall/
+              sudo chown -R admin:admin /home/${{ env.SSH_USERNAME }}/Crystall/
+            else
+              echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
+            fi
+          #   [[ -f /home/${{ env.SSH_USERNAME }}/Crystall/ ]] \
+          #   && sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/ \
+          #   || echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
             
       # - name: Refresh content
       #   uses: webfactory/ssh-agent@v0.5.4
@@ -62,8 +68,14 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ env.SSH_PORT }}
           script: |
-            sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/devops \
-            && ls -l /home/${{ env.SSH_USERNAME }}/Crystall/devops
+            if [[ -d /home/${{ env.SSH_USERNAME }}/Crystall/ ]]; then
+              sudo chmod -R 755 /home/${{ env.SSH_USERNAME }}/Crystall/
+              sudo chown -R admin:admin /home/${{ env.SSH_USERNAME }}/Crystall/
+            else
+              echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
+            fi
+            # sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/devops \
+            # && ls -l /home/${{ env.SSH_USERNAME }}/Crystall/devops
 
       - name: Check docker and docker-compose
         uses: appleboy/ssh-action@master
