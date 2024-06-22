@@ -26,8 +26,8 @@ jobs:
           port: ${{ env.SSH_PORT }}
           run: |
             if [[ -d /home/${{ env.SSH_USERNAME }}/Crystall/ ]]; then
-              sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/
-              sudo chown -R ${{ env.SSH_USERNAME }}:${{ env.SSH_USERNAME }} /home/${{ env.SSH_USERNAME }}/Crystall/
+              sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/ && echo "chmod done"
+              sudo chown -R ${{ env.SSH_USERNAME }}:${{ env.SSH_USERNAME }} /home/${{ env.SSH_USERNAME }}/Crystall/ && echo "chown done"
             else
               echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
             fi
