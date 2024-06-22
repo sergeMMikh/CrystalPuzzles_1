@@ -71,6 +71,8 @@ jobs:
             if [[ -d /home/${{ env.SSH_USERNAME }}/Crystall/ ]]; then
               sudo chmod -R 755 /home/${{ env.SSH_USERNAME }}/Crystall/
               sudo chown -R ${{ env.SSH_USERNAME }}:${{ env.SSH_USERNAME }} /home/${{ env.SSH_USERNAME }}/Crystall/
+              sudo chmod +x /home/${{ env.SSH_USERNAME }}/Crystall/devops/check_docker.sh
+              sudo chmod +x /home/${{ env.SSH_USERNAME }}/Crystall/devops/install_docker_docker-compose.sh
             else
               echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
             fi
