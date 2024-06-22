@@ -72,7 +72,7 @@ jobs:
               sudo chmod -R 755 /home/${{ env.SSH_USERNAME }}/Crystall/
               sudo chown -R ${{ env.SSH_USERNAME }}:${{ env.SSH_USERNAME }} /home/${{ env.SSH_USERNAME }}/Crystall/
               sudo chmod 777 /home/${{ env.SSH_USERNAME }}/Crystall/devops/check_docker.sh
-              sudo chmod 777 /home/${{ env.SSH_USERNAME }}/Crystall/devops/install_docker_docker-compose.sh
+              sudo chmod 777 /home/${{ env.SSH_USERNAME }}/Crystall/devops/install_docker_docker-compose.s
             else
               echo "/home/${{ env.SSH_USERNAME }}/Crystall/ not found"
             fi
@@ -88,7 +88,8 @@ jobs:
           port: ${{ env.SSH_PORT }}
           script: |
              /home/${{ env.SSH_USERNAME }}/Crystall/devops/check_docker.sh || \
-             /home/${{ env.SSH_USERNAME }}/Crystall/devops/install_docker_docker-compose.sh
+             /home/${{ env.SSH_USERNAME }}/Crystall/devops/install_docker_docker-compose.sh ||
+              echo "Did not check Docker"
 
       - name: Stop docker conteiners and clean docker images
         uses: appleboy/ssh-action@master
