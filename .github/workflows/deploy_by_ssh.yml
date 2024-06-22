@@ -38,6 +38,11 @@ jobs:
       #     rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete \
       #     . ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST_NAME }}:Crystall
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
       - name: Add known hosts
         run: |
           mkdir -p ~/.ssh
@@ -47,6 +52,7 @@ jobs:
         run: |
           rsync -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete \
           . ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST_NAME }}:Crystall
+      # ________________
 
       - name: Change directory permitions again
         uses: appleboy/ssh-action@master
