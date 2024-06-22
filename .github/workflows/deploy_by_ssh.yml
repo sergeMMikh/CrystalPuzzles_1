@@ -25,6 +25,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ env.SSH_PORT }}
           script: |
+            bash
             # if [[ -d /home/${{ env.SSH_USERNAME }}/Crystall/ ]]; then
             #   sudo chmod -R 777 /home/${{ env.SSH_USERNAME }}/Crystall/ && echo "chmod done"
             #   sudo chown -R ${{ env.SSH_USERNAME }}:${{ env.SSH_USERNAME }} /home/${{ env.SSH_USERNAME }}/Crystall/ && echo "chown done"
