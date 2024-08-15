@@ -59,7 +59,6 @@ jobs:
 
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
-        if: ${{ steps.release-label.outputs.level != null }}
 
       - uses: actions-ecosystem/action-bump-semver@v1
         id: bump-semver
