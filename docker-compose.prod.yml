@@ -92,3 +92,8 @@ networks:
 
   frontend:
     driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
+    
