@@ -50,19 +50,34 @@ class CheckRepository(BaseRepository):
     async def add_user_for_lesson(self, lesson_id, data: dict) -> bool:
         """Добавить пользователя в урок."""
 
+        # Проверка наличия пользователя в уроке
         if await self.get_by_filter(student_id=data.get('student_id'), lesson_id=lesson_id):
             raise HTTPException(status_code=400, detail="Student already exist in lesson")
 
-        training_data = (await self.session.execute(
+        # Получение training_data для указанного lesson_id
+        # training_data = (await self.session.execute(
+        #     select(self.model)
+        #     .options(
+        #         selectinload(self.model.training_data)
+        #     )
+        #     .filter(
+        #         self.model.lesson_id == lesson_id
+        #     )
+        #     .limit(1)
+        # )).scalar_one_or_none().training_data
+
+        lesson = (await self.session.execute(
             select(self.model)
-            .options(
-                selectinload(self.model.training_data)
-            )
-            .filter(
-                self.model.lesson_id == lesson_id
-            )
+            .options(selectinload(self.model.training_data))
+            .filter(self.model.lesson_id == lesson_id)
             .limit(1)
-        )).scalar_one_or_none().training_data
+        )).scalar_one_or_none()
+
+        if not lesson:
+            raise HTTPException(status_code=404, detail="Lesson not found or has no training data")
+
+        training_data = lesson.training_data
+        
         data["training_check"] = (
             {"training_id": training.training_id, "repetitions": training.repetitions} for training in training_data
         )

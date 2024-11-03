@@ -11,7 +11,7 @@ from service.training.dependensies import TrainingUOWDep
 from service.users.dependensies import UserUOWDep
 
 from service.lesson.schemas.lesson_schemas import LessonSchemaForTable, LessonViewSchemaForPage, \
-    CreateLessonSchema, EditLessonSchema, TrainingForLessonSchema, UserForLessonSchema, ChangeStatusSchema
+    CreateLessonSchema, EditLessonSchema, Task, TrainingForLessonSchema, UserForLessonSchema, ChangeStatusSchema
 
 lesson_router = APIRouter(
     prefix="/api/v1/lesson",
@@ -316,3 +316,17 @@ async def remove_user(
 #     if result:
 #         return result
 #     return JSONResponse(status_code=HTTPStatus.BAD_REQUEST.value, content="Training already exists in lesson")
+
+@lesson_router.get(
+    "/tasks",
+    summary="Тестирование приложения",
+    responses={
+        200: {"description": "Успешная обработка данных"},
+        401: {"description": "Не авторизованный пользователь"}
+    }
+)
+def get_tasks(current_user: UserDep):
+    """Тестирование приложения для авторизованных пользователей."""
+    task = Task(name="Test of tests! (Made by SM)")
+    return {"data": "Hello world!"}
+

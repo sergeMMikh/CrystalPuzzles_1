@@ -98,3 +98,8 @@ class ChangeStatusSchema(BaseModel):
 #     date_add: datetime = Field(default_factory=datetime.now, hidden=True)
 #     date_update: datetime = Field(default_factory=datetime.now, hidden=True)
 #     checks: List[TestChecksSchema]
+
+
+class Task(BaseModel):
+    name: str
+    description: Optional[str] = None
