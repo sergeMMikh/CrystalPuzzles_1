@@ -96,16 +96,18 @@ class CheckRepository(BaseRepository):
             raise HTTPException(status_code=400, detail="Student already exist in lesson")
 
         # получает связанные данные training_data
-        training_data = (await self.session.execute(
+        lesson = (await self.session.execute(
             select(self.model)
-            .options(
-                selectinload(self.model.training_data)
-            )
-            .filter(
-                self.model.lesson_id == lesson_id
-            )
+            .options(selectinload(self.model.training_data))
+            .filter(self.model.lesson_id == lesson_id)
             .limit(1)
-        )).scalar_one_or_none().training_data
+        )).scalar_one_or_none()
+
+        if not lesson:
+            raise HTTPException(status_code=404, detail="Lesson not found")
+
+        training_data = lesson.training_data
+
         # создания записей training_check для нового пользователя
         data["training_check"] = (
             {"training_id": training.training_id, "repetitions": training.repetitions} for training in training_data
