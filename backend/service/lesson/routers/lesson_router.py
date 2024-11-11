@@ -3,6 +3,7 @@ from http import HTTPStatus
 from fastapi import APIRouter, Response
 from starlette.responses import JSONResponse
 
+from service.lesson.schemas.check_schema import TestSchema
 from common.dependensies import AdminDep, SupervisorAdminDep, UserDep, TrainerSupervisorAdminDep, TrainerDep
 from common.schema.base_schemas import Message
 from service.lesson.dependensies import LessonServiceDep, LessonUOWDep, LessonFilterDep, SpaceUOWDep, CheckUOWDep
@@ -316,3 +317,17 @@ async def remove_user(
 #     if result:
 #         return result
 #     return JSONResponse(status_code=HTTPStatus.BAD_REQUEST.value, content="Training already exists in lesson")
+
+@lesson_router.get(
+    "/tasks/test",
+    summary="Тестирование приложения",
+    responses={
+        200: {"description": "Успешная обработка данных"},
+        401: {"description": "Не авторизованный пользователь"}
+    }
+)
+def get_tasks(current_user: UserDep):
+    """Тестирование приложения для авторизованных пользователей."""
+    task = TestSchema(name="Test of tests! (Made by SM)")
+    return {"data": task}
+

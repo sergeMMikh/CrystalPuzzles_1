@@ -77,3 +77,9 @@ class CheckSchemaForTable(BaseModel):
 #     """ Фильтрация и пагинация """
 #     date_begin: datetime | None = Query(default=None, description="Дата начала занятия")
 #     trainer: int | None = Query(default=None, description="Тренер")
+
+
+class TestSchema(BaseModel):
+    """ Помтраничный вывод деталей моделей тренировок """
+    name: str
+    descripton: Optional[str] = None
