@@ -319,15 +319,20 @@ async def remove_user(
 #     return JSONResponse(status_code=HTTPStatus.BAD_REQUEST.value, content="Training already exists in lesson")
 
 @lesson_router.get(
-    "/tasks/test",
-    summary="Тестирование приложения",
+    "/tasks/test/{lesson_id}",
+    summary="Тестирование приложения",    
     responses={
         200: {"description": "Успешная обработка данных"},
-        401: {"description": "Не авторизованный пользователь"}
+        401: {"description": "Не авторизованный пользователь"},
+        400: {"model": Message, "description": "Некорректные данные"},
+        500: {"model": Message, "description": "Серверная ошибка"}
     }
 )
-def get_tasks(current_user: UserDep):
+def get_tasks(current_user: UserDep,
+              lesson_id: int):
     """Тестирование приложения для авторизованных пользователей."""
-    task = TestSchema(name="Test of tests! (Made by SM)")
+    task = TestSchema(name="Test of tests! (Made by SM)", 
+                      lesson_id=lesson_id,
+                      descripton="Just a simple lesson test")
     return {"data": task}
 

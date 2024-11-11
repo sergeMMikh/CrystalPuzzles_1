@@ -82,4 +82,5 @@ class CheckSchemaForTable(BaseModel):
 class TestSchema(BaseModel):
     """ Помтраничный вывод деталей моделей тренировок """
     name: str
+    lesson_id: int
     descripton: Optional[str] = None
