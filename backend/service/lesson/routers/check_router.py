@@ -17,12 +17,12 @@ from service.identity.security import get_current_user
 from service.lesson.repositories.lesson_repository import LessonRepository
 from service.lesson.schemas.check_schema import CreateCheckSchema
 
-# check_router = APIRouter(
-#     prefix="/api/v1/check",
-#     tags=["Check"]
-# )
-#
-#
+check_router = APIRouter(
+    prefix="/api/v1/check",
+    tags=["Check"]
+)
+
+
 # @check_router.post(
 #     "/",
 #     summary="Создание Чек-листа",
