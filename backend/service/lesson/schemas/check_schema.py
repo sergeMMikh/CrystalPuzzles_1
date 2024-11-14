@@ -39,6 +39,20 @@ class CheckSchemaForTable(BaseModel):
     comment: Optional[str]
     awards: Optional[int]
     training_data: List[TrainingCheckResponseSchema]
+'''
+ Модель схемы Check:
+     id: Mapped[int] = mapped_column(sa.Integer, primary_key=True, unique=True, autoincrement=True, nullable=False)
+     student_id: Mapped[int] = mapped_column(sa.ForeignKey("Users.id"), nullable=False)
+     student = relationship("User", back_populates="students")
+     lesson_id: Mapped[int] = mapped_column(sa.ForeignKey("Lessons.id"), nullable=False)
+     lesson = relationship("Lesson", back_populates="check")
+     comment: Mapped[str] = mapped_column(sa.String, nullable=True)
+     awards: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("Awards.id"), nullable=True)
+     deleted: Mapped[bool] = mapped_column(sa.Boolean, default=False, nullable=False)
+     date_add: Mapped[datetime] = mapped_column(sa.DateTime, nullable=False)
+     date_update: Mapped[datetime] = mapped_column(sa.DateTime, nullable=False)
+     training_data = relationship("TrainingCheck", back_populates="check")
+'''
 
 # class EditLessonSchema(BaseModel):
 #     """ Схема изменения моделей занятий """

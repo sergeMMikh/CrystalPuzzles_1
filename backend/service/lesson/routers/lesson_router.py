@@ -14,6 +14,8 @@ from service.users.dependensies import UserUOWDep
 from service.lesson.schemas.lesson_schemas import LessonSchemaForTable, LessonViewSchemaForPage, \
     CreateLessonSchema, EditLessonSchema, TrainingForLessonSchema, UserForLessonSchema, ChangeStatusSchema
 
+from pprint import pprint
+
 lesson_router = APIRouter(
     prefix="/api/v1/lesson",
     tags=["Lesson"]
@@ -38,6 +40,8 @@ async def get_lesson(
 ):
     """ admin, supervisor, trainer """
     result = await lesson_service.get(uow, lesson_id, user=current_user)
+    print('result')
+    pprint(result)
     if result:
         return result
     return JSONResponse(status_code=HTTPStatus.BAD_REQUEST.value, content="Lesson not found")

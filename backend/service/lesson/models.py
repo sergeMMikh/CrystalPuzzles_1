@@ -68,7 +68,7 @@ class Check(Base):
     Модель таблицы Проверки. 
     Содержит связь  с таблицей пользовтерля через student_id 
     связь с таблицей урока через lesson_id.
-    Награды связаны через awards.
+    Награды связаны через awards
     '''
     __tablename__ = "Checks"
     id: Mapped[int] = mapped_column(sa.Integer, primary_key=True, unique=True, autoincrement=True, nullable=False)
