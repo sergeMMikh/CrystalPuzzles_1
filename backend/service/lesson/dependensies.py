@@ -16,7 +16,7 @@ from service.lesson.unit_of_work.space_uow import SpaceUOW
 # region ------------------------------- Service ------------------------------------
 LessonServiceDep = Annotated[LessonService, Depends(LessonService)]
 SpaceServiceDep = Annotated[SpaceService, Depends(SpaceService)]
-CheckServiceDep = Annotated[CheckService, Depends(CheckService)]
+CheckServiceDep = Annotated[CheckService, Depends(CheckService)] 
 # endregion -------------------------------------------------------------------------
 
 
