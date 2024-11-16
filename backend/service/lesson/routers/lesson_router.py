@@ -209,6 +209,8 @@ async def create_check(
         current_user: TrainerDep
 ):
     """ trainer """
+    print('model')
+    pprint(model)
     result = await service.add_check_for_lesson(
         uow, model,
         check_uow=check_uow,
