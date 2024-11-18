@@ -32,55 +32,55 @@ def get_task():
 @check_router.post(
     "/",
     summary="Создание Чек-листа",
-    # response_model=bool, #модель, которая описывает тип возвращаем данных
-    response_model=bool,
+    response_model=int,
     responses={
         200: {"description": "Успешная обработка данных"},
         401: {"description": "Не авторизованный пользователь"},
         400: {"model": Message, "description": "Некорректные данные"},
         500: {"model": Message, "description": "Серверная ошибка"}},
-    )
+)
 async def create_check(
-    model: CreateCheckSchema, # Описывает входные данные (ID студентов, ID урока, даты и т. д.).
-    # lesson_uow=Depends(LessonUOW), # Это объект Unit of Work (UOW), который используется для управления транзакциями и доступом к репозиторию уроков.
-    # uow=Depends(CheckUOWDep), # Ещё один UOW для работы с репозиториями чек-листов.
-    # check_service=Depends(CheckServiceDep), # Сервис для работы с логикой чек-листов. Это зависимость, созданная с помощью Annotated и Depends. Она создаёт экземпляр CheckService, который затем передаётся в обработчики запросов.
-    current_user: TrainerDep  # Зависимость, определяющая текущего пользователя. Используется для контроля доступа.
-    ):
+    model: CreateCheckSchema,
+    uow: CheckUOWDep, # Ещё один UOW для работы с репозиториями чек-листов.
+    current_user: TrainerDep
+    # lesson_uow: LessonUOW = Depends(),  # Используем Depends() для разрешения зависимости
+    # uow: CheckUOWDep = Depends(),
+    # current_user: TrainerDep = Depends()
+):
     print('model')
     pprint(model.dict())
-    return await create_check_to_base(model)
+    return 1
 
-async def create_check_to_base(
-    model: CreateCheckSchema,
-    lesson_uow: LessonUOW = Depends(),
-    uow: CheckUOWDep = Depends(),
-    check_service=Depends(get_check_service) 
-) -> bool:
-    """
-    Сохранение чек-листа в базу данных.
-    """
-    print("Сохранение данных в базу:")
-    pprint(model.dict())
+# async def create_check_to_base(
+#     model: CreateCheckSchema,
+#     lesson_uow: LessonUOW = Depends(),
+#     uow: CheckUOWDep = Depends(),
+#     check_service=Depends(get_check_service) 
+# ) -> bool:
+#     """
+#     Сохранение чек-листа в базу данных.
+#     """
+#     print("Сохранение данных в базу:")
+#     pprint(model.dict())
 
-    # Вызов сервиса для добавления чек-листа к уроку
-    result = await check_service.add_check_for_lesson(
-        uow=uow,
-        model=model,
-        lesson_uow=lesson_uow
-    )
+#     # Вызов сервиса для добавления чек-листа к уроку
+#     result = await check_service.add_check_for_lesson(
+#         uow=uow,
+#         model=model,
+#         lesson_uow=lesson_uow
+#     )
 
-    # Проверка результата и возврат ответа
-    if result:
-        print("Чек-лист успешно создан.")
-        return True
+#     # Проверка результата и возврат ответа
+#     if result:
+#         print("Чек-лист успешно создан.")
+#         return True
 
-    # Возвращаем ответ с ошибкой, если чек-лист уже существует
-    print("Ошибка: Чек-лист уже существует.")
-    raise JSONResponse(
-        status_code=HTTPStatus.CONFLICT.value,
-        content={"detail": "Check existing"}
-    )
+#     # Возвращаем ответ с ошибкой, если чек-лист уже существует
+#     print("Ошибка: Чек-лист уже существует.")
+#     raise JSONResponse(
+#         status_code=HTTPStatus.CONFLICT.value,
+#         content={"detail": "Check existing"}
+#     )
 
 
 # """
