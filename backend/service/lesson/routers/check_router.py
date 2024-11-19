@@ -32,7 +32,7 @@ def get_task():
 @check_router.post(
     "/",
     summary="Создание Чек-листа",
-    response_model=int,
+    response_model=bool,
     responses={
         200: {"description": "Успешная обработка данных"},
         401: {"description": "Не авторизованный пользователь"},
@@ -42,14 +42,12 @@ def get_task():
 async def create_check(
     model: CreateCheckSchema,
     uow: CheckUOWDep, # Ещё один UOW для работы с репозиториями чек-листов.
+    lesson_uow: LessonUOW,
     current_user: TrainerDep
-    # lesson_uow: LessonUOW = Depends(),  # Используем Depends() для разрешения зависимости
-    # uow: CheckUOWDep = Depends(),
-    # current_user: TrainerDep = Depends()
 ):
     print('model')
     pprint(model.dict())
-    return 1
+    return True
 
 # async def create_check_to_base(
 #     model: CreateCheckSchema,
