@@ -17,6 +17,8 @@ from service.identity.security import get_current_user
 from service.lesson.repositories.lesson_repository import LessonRepository
 from service.lesson.schemas.check_schema import CreateCheckSchema, CreateCheckSchemaTest
 
+from service.lesson.dependensies import LessonServiceDep, LessonUOWDep, LessonFilterDep, SpaceUOWDep, CheckUOWDep
+
 from pprint import pprint
 
 check_router = APIRouter(
@@ -42,7 +44,7 @@ def get_task():
 async def create_check(
     model: CreateCheckSchema,
     uow: CheckUOWDep, # Ещё один UOW для работы с репозиториями чек-листов.
-    lesson_uow: LessonUOW,
+    lesson_service: LessonServiceDep,
     current_user: TrainerDep
 ):
     print('model')
