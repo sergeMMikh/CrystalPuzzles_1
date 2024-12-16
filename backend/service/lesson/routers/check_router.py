@@ -12,12 +12,13 @@ from service.lesson.dependensies import CheckUOWDep, CheckServiceDep
 from service.lesson.unit_of_work.lesson_uow import LessonUOW
 from service.users.models import User
 from service.users.repository import UserRepository
+from service.lesson.schemas.lesson_schemas import MakeCheckList
 
 from service.identity.security import get_current_user
 from service.lesson.repositories.lesson_repository import LessonRepository
 from service.lesson.schemas.check_schema import CreateCheckSchema, CreateCheckSchemaTest
 
-from service.lesson.dependensies import LessonServiceDep, LessonUOWDep, LessonFilterDep, SpaceUOWDep, CheckUOWDep
+from service.lesson.dependensies import LessonServiceDep, LessonUOWDep, LessonFilterDep, SpaceUOWDep, CheckUOWDep, MakeCheckListDep
 
 from pprint import pprint
 
@@ -25,7 +26,6 @@ check_router = APIRouter(
     prefix="/api/v1/check",
     tags=["Check"]
 )
-
 
 @check_router.get("/")
 def get_task():
@@ -42,13 +42,17 @@ def get_task():
         500: {"model": Message, "description": "Серверная ошибка"}},
 )
 async def create_check(
-    model: CheckServiceDep, # CheckServiceDep = Annotated[CheckService, Depends(CheckService)]
+    model: MakeCheckList, # MakeCheckListDep = Annotated[MakeCheckListDep, Depends(MakeCheckListDep)]
     uow: CheckUOWDep, # Ещё один UOW для работы с репозиториями чек-листов.
     lesson_service: LessonServiceDep,
     current_user: TrainerDep
 ):
     print('model')
-    pprint(model.dict())
+    pprint(model)
+
+    print(f'lesson_id: {model.lesson_id}')
+    print(f'students_id: {model.students_id}')
+    print(f'training_check: {model.training_check}')
     return True
 
 # async def create_check_to_base(

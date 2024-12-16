@@ -83,6 +83,38 @@ class LessonFilterSchema(BaseFilterSchema):
 class ChangeStatusSchema(BaseModel):
     status: Literal["created", "in_editing", "in_progress", "finished"]
 
+
+# { 
+#   "students_id": [ 
+#     1, 2, 3 
+#   ], 
+#   "lesson_id": 1, 
+#   "training_check": [ 
+#     { 
+#       "training_id": 1, 
+#       "repetitions": 5
+#     },
+#     { 
+#       "training_id": 2, 
+#       "repetitions": 8
+#     }  
+#   ] 
+# }
+
+class Train(BaseModel):
+    training_id: int
+    repetitions: int
+
+class MakeCheckList(BaseModel):
+    '''
+    Схема Отправки чек-листов
+    '''
+    students_id: List[int]
+    lesson_id: int
+    training_check: List[Train]
+
+
+
 # class TestChecksSchema:
 #     student_id: int
 #     trainig_id: int

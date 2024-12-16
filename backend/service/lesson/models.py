@@ -90,7 +90,7 @@ class Check(Base):
 
 class TrainingCheck(Base):
     '''
-    Модель: даннве тренировки.
+    Модель: данные тренировки.
     '''
     __tablename__ = "TrainingChecks"
     check_id: Mapped[int] = mapped_column(sa.ForeignKey("Checks.id"), primary_key=True)
