@@ -45,6 +45,7 @@ async def create_check(
     model: MakeCheckList, # MakeCheckListDep = Annotated[MakeCheckListDep, Depends(MakeCheckListDep)]
     uow: CheckUOWDep, # Ещё один UOW для работы с репозиториями чек-листов.
     lesson_service: LessonServiceDep,
+    check_service: CheckServiceDep,    
     current_user: TrainerDep
 ):
     print('model')
@@ -59,11 +60,11 @@ async def create_check(
 
     # Вызов сервиса для добавления чек-листа к уроку
     result = True
-    # result = await check_service.add_check_for_lesson(
-    #     uow=uow,
-    #     model=model,
-    #     lesson_uow=lesson_service
-    # )
+    result = await check_service.add_check_for_lesson(
+        uow=uow,
+        lesson_id=model.lesson_id,
+        data=model.dict()
+    )
 
     # Проверка результата и возврат ответа
     if result:
