@@ -53,6 +53,32 @@ async def create_check(
     print(f'lesson_id: {model.lesson_id}')
     print(f'students_id: {model.students_id}')
     print(f'training_check: {model.training_check}')
+
+    print("Сохранение данных в базу:")
+    pprint(model.dict())
+
+    # Вызов сервиса для добавления чек-листа к уроку
+    result = True
+    # result = await check_service.add_check_for_lesson(
+    #     uow=uow,
+    #     model=model,
+    #     lesson_uow=lesson_service
+    # )
+
+    # Проверка результата и возврат ответа
+    if result:
+        print("Чек-лист успешно создан.")
+        return True
+
+    # Возвращаем ответ с ошибкой, если чек-лист уже существует
+    print("Ошибка: Чек-лист уже существует.")
+    raise JSONResponse(
+        status_code=HTTPStatus.CONFLICT.value,
+        content={"detail": "Check existing"}
+    )
+
+
+
     return True
 
 # async def create_check_to_base(
