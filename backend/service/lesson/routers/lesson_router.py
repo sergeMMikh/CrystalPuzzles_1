@@ -40,8 +40,6 @@ async def get_lesson(
 ):
     """ admin, supervisor, trainer """
     result = await lesson_service.get(uow, lesson_id, user=current_user)
-    print('result')
-    pprint(result)
     if result:
         return result
     return JSONResponse(status_code=HTTPStatus.BAD_REQUEST.value, content="Lesson not found")
