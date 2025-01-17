@@ -1,5 +1,6 @@
 from datetime import datetime
 from fastapi import HTTPException
+import sqlalchemy as sa
 from sqlalchemy import insert, select, exists, delete
 from sqlalchemy.orm import selectinload, joinedload
 
@@ -166,3 +167,44 @@ class CheckRepository(BaseRepository):
         stmt = delete(TrainingCheck).filter(TrainingCheck.check_id == check.id)
         await self.session.execute(stmt)
         await self.delete_db(check.id)
+
+    async def update_check_by_id(self, check_id: int, data: dict):
+        """
+        Обновление чек-листа по ID.
+        """
+        stmt = (
+            select(self.model)
+            .filter(self.model.id == check_id)
+        )
+        check = await self.session.execute(stmt)
+        check = check.scalar_one_or_none()
+
+        if not check:
+            return
+
+        # Обновляем данные
+        for key, value in data.items():
+            if hasattr(check, key):
+                setattr(check, key, value)
+
+        await self.session.commit()
+
+    async def delete_check_by_id(self, check_id: int):
+        """
+        Удаление чек-листа по ID.
+        """
+        stmt = delete(self.model).filter(self.model.id == check_id)
+        await self.session.execute(stmt)
+        await self.session.commit()
+
+    async def mark_check_as_deleted(self, check_id: int):
+        """
+        Обновление поля deleted для чек-листа.
+        """
+        stmt = (
+            sa.update(Check)
+            .where(Check.id == check_id)
+            .values(deleted=True, date_update=datetime.utcnow())  # Обновляем поле deleted и дату обновления
+        )
+        await self.session.execute(stmt)
+        await self.session.commit()

@@ -12,7 +12,7 @@ settings = Settings()
 async def test_direct_database_connection():
     """Тест для проверки прямого подключения к базе данных."""
     # Данные для подключения
-    PG_HOST = "localhost"  # Используем localhost для подключения из теста
+    PG_HOST = "db"  # Используем localhost для подключения из теста
 
     async_database_uri = f"postgresql+asyncpg://{settings.pg_user}:{settings.pg_password}@{PG_HOST}:{settings.pg_port}/{settings.pg_database}"  # Преобразуем PostgresDsn в строку
     print(f'settings.async_database_uri: {async_database_uri}')

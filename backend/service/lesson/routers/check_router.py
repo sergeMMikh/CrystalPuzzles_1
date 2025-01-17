@@ -191,3 +191,74 @@ async def create_check(
         status_code=HTTPStatus.CONFLICT.value,
         content={"detail": "Check existing"}
     )
+
+
+@check_router.put(
+    "/{check_id}",
+    summary="Изменение чек-листа по ID",
+    responses={
+        200: {"description": "Чек-лист успешно обновлён"},
+        400: {"model": Message, "description": "Некорректные данные"},
+        404: {"description": "Чек-лист не найден"},
+        500: {"model": Message, "description": "Серверная ошибка"},
+    },
+)
+async def update_check(
+    check_id: int,
+    model: MakeCheckList,
+    uow: CheckUOWDep,
+    check_service: CheckServiceDep,
+    current_user: TrainerSupervisorAdminDep,
+):
+    """
+    Обновление чек-листа:
+    - Список учеников (students_id).
+    - Список упражнений (training_check).
+    """
+    role = current_user.role  # Проверяем роль пользователя
+    if role not in ["trainer", "supervisor", "admin"]:
+        raise HTTPException(status_code=403, detail="Недостаточно прав для выполнения операции")
+
+    print(f"Updating check with ID: {check_id}")
+
+    # Вызываем сервис для обновления данных
+    result = await check_service.update_check_by_id(
+        uow=uow,
+        check_id=check_id,
+        data=model.dict(),
+    )
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Чек-лист не найден")
+
+    print(f"Check with ID {check_id} successfully updated.")
+    return {"message": "Чек-лист успешно обновлён"}
+
+
+@check_router.delete(
+    "/{check_id}",
+    summary="Логическое удаление чек-листа по ID",
+    responses={
+        200: {"description": "Чек-лист успешно удалён"},
+        404: {"description": "Чек-лист не найден"},
+    },
+)
+async def delete_check(
+    check_id: int,
+    uow: CheckUOWDep,
+    check_service: CheckServiceDep,
+    current_user: TrainerSupervisorAdminDep,
+):
+    """
+    Логическое удаление чек-листа (установка deleted=True).
+    """
+    role = current_user.role  # Проверяем роль пользователя
+    if role not in ["trainer", "supervisor", "admin"]:
+        raise HTTPException(status_code=403, detail="Недостаточно прав для выполнения операции")
+
+    print(f"Marking check with ID {check_id} as deleted.")
+
+    # Отмечаем чек-лист как удалённый
+    await check_service.mark_check_as_deleted(uow, check_id)
+
+    return {"message": "Чек-лист успешно удалён"}

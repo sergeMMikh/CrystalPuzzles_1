@@ -1,4 +1,6 @@
 from pprint import pprint
+
+from fastapi import HTTPException
 from common.service.base_service import BaseService
 from service.lesson.unit_of_work.check_uow import CheckUOW
 
@@ -47,3 +49,55 @@ class CheckService(BaseService):
         async with uow:
             check = await uow.repo.get_check_by_id(check_id)
         return check
+    
+    @staticmethod
+    async def update_check_by_id(uow: CheckUOW, check_id: int, data: dict) -> bool:
+        """
+        Обновление чек-листа по ID.
+        """
+        async with uow:
+            # Проверяем, существует ли чек-лист
+            existing_check = await uow.repo.get_check_by_id(check_id)
+            if not existing_check:
+                return False
+
+            print(f"Existing check found: {existing_check}")
+
+            # Обновляем данные чек-листа
+            await uow.repo.update_check_by_id(check_id, data)
+            await uow.commit()
+            return True
+
+    @staticmethod
+    async def delete_check_by_id(uow: CheckUOW, check_id: int) -> bool:
+        """
+        Удаление чек-листа по ID.
+        """
+        async with uow:
+            # Проверяем, существует ли чек-лист
+            existing_check = await uow.repo.get_check_by_id(check_id)
+            if not existing_check:
+                return False
+
+            print(f"Deleting check: {existing_check}")
+
+            # Удаляем чек-лист
+            await uow.repo.delete_check_by_id(check_id)
+            await uow.commit()
+            return True
+        
+    @staticmethod
+    async def mark_check_as_deleted(uow: CheckUOW, check_id: int) -> bool:
+        """
+        Логическое удаление чек-листа.
+        """
+        async with uow:
+            # Проверяем, существует ли чек-лист
+            existing_check = await uow.repo.get_check_by_id(check_id)
+            if not existing_check:
+                raise HTTPException(status_code=404, detail="Чек-лист не найден")
+
+            # Отмечаем как удалённый
+            await uow.repo.mark_check_as_deleted(check_id)
+            await uow.commit()
+            return True
